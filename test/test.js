@@ -52,5 +52,11 @@ describe('request-ntlm-continued', function(){
                 done();
             });
         });
+
+        it('return promise if callback and pipeTarget not provided', function(done){
+            request.get(options).then(()=>{
+                done()
+            })
+        });
     });
 });

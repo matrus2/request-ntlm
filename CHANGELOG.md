@@ -1,3 +1,7 @@
+# 0.2.0
+
+* Return promise if callback and pipeTarget is not provided 
+
 # 0.1.6
 
 * Update dependencies 

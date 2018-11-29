@@ -34,6 +34,13 @@ Requests can also be streamed:
 ntlm.get(opts, json, null, fs.createWriteStream('example.pdf'));
 ```
 
+Requests can be promises:
+
+```javascript
+await ntlm.get(opts, json);
+```
+
+
 ## Changes from original:
 
 * don't assume the post body is an object and should be made into json
@@ -43,3 +50,4 @@ ntlm.get(opts, json, null, fs.createWriteStream('example.pdf'));
 * gracefully complete the request if the server doesn't actually require NTLM.
   Fail only if `options.ntlm.strict` is set to `true` (default=`false`).
 * implement streaming
+* promisified

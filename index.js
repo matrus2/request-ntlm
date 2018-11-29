@@ -3,6 +3,19 @@ var async   = require('async');
 var request = require('request');
 var ntlm    = require('./lib/ntlm');
 
+var promisedRequest = function(method, options, params, callback, pipeTarget) {
+  if (!callback && !pipeTarget) {
+    return new Promise((resolve, reject) => {
+      makeRequest(method, options, params, (err, res) => {
+          if (err) reject(err)
+          return resolve(res);
+        }
+      );
+    })
+  }
+  makeRequest('post', options, params, callback, pipeTarget);
+}
+
 var makeRequest = function(method, options, params, callback, pipeTarget) {
 
   var KeepAlive = require('agentkeepalive');
@@ -62,8 +75,8 @@ var makeRequest = function(method, options, params, callback, pipeTarget) {
   async.waterfall([startAuth, requestComplete], callback);
 };
 
-exports.get     = _.partial(makeRequest, 'get');
-exports.post    = _.partial(makeRequest, 'post');
-exports.put     = _.partial(makeRequest, 'put');
-exports.patch   = _.partial(makeRequest, 'patch');
-exports.delete  = _.partial(makeRequest, 'delete');
+exports.get     = _.partial(promisedRequest, 'get');
+exports.post    = _.partial(promisedRequest, 'post');
+exports.put     = _.partial(promisedRequest, 'put');
+exports.patch   = _.partial(promisedRequest, 'patch');
+exports.delete  = _.partial(promisedRequest, 'delete');
