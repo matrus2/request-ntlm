@@ -1,6 +1,8 @@
 # Request-NTLM-promise
 
-Ntlm authentication wrapper for the Request promise module. It authenticates each request via NTLM protocol.
+Ntlm authentication _promise_ wrapper for the Request module. It authenticates each request via NTLM protocol.
+
+The core of this reposotory comes from [request-ntlm](https://github.com/colynb/request-ntlm) which was improved by [request-ntlm-continued](https://github.com/FrankyBoy/request-ntlm). Here you can find complete refactor of both with ability to use promises.
 
 ## Usage
 
@@ -50,6 +52,3 @@ const data = await ntlm.post(options, json)
 console.log(data)
 ```
 
-###Notes
-
-The core of this reposotory comes from [request-ntlm](https://github.com/colynb/request-ntlm) which was imporoved by [request-ntlm-continued](https://github.com/FrankyBoy/request-ntlm). Here you can find complete refactor of both with ability to use promises.
