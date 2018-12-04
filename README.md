@@ -1,3 +1,6 @@
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com)
+![npm type definitions](https://img.shields.io/npm/types/chalk.svg)
+
 # Request-NTLM-promise
 
 Ntlm authentication _promise_ wrapper for the Request module. It authenticates each request via NTLM protocol.
