@@ -1,53 +1,55 @@
-# Request-NTLM
+# Request-NTLM-promise
 
-Module for authenticating with NTLM; An ntlm authentication wrapper for the Request module.
-
-## Install with NPM
-
-```
-$ npm install --save-dev request-ntlm-continued
-```
+Ntlm authentication wrapper for the Request promise module. It authenticates each request via NTLM protocol.
 
 ## Usage
 
-```javascript
-var ntlm = require('request-ntlm-continued');
+#### Install from npm
+```
+$ npm install request-ntlm-promise
+```
+#### Import
+`const ntlm = require('request-ntlm-promise');`
+#### Choose method
+##### `reqntlm.get(options, json)`
+##### `reqntlm.post(options, json)`
+##### `reqntlm.patch(options, json)`
+##### `reqntlm.put(options, json)`
+##### `reqntlm.delete(options, json)`
 
-var opts = {
+#### Possible parameters
+
+##### `options`
+- `username`: username;
+- `password`: password;
+- `ntlm_domain`: domain either http or https; 
+- `url`: complete path to the resource;
+- `workstation`: workstation;
+- other options, which should be passed to Request module e.g. default headers.
+##### `params`
+This can be `string` or `object`
+
+### Example
+```javascript
+const ntlm = require('request-ntlm-promise');
+const URL = 'http://yourdomain.com'
+const options = {
   username: 'username',
   password: 'password',
-  ntlm_domain: 'yourdomain',
-  workstation: 'workstation',
-  url: 'http://example.com/path/to/resource'
+  ntlm_domain: URL,
+  url: `${URL}/path/to/resource`
 };
-var json = {
+const json = {
   // whatever object you want to submit
 };
-ntlm.post(opts, json, function(err, response) {
-  // do something
-});
+
+ntlm.post(options, json).then(console.log)
+
+// or use async/await
+const data = await ntlm.post(options, json)
+console.log(data)
 ```
 
-Requests can also be streamed:
+###Notes
 
-```javascript
-ntlm.get(opts, json, null, fs.createWriteStream('example.pdf'));
-```
-
-Requests can be promises:
-
-```javascript
-await ntlm.get(opts, json);
-```
-
-
-## Changes from original:
-
-* don't assume the post body is an object and should be made into json
-* options.domain is in use by request. Use ntlm_domain instead
-* ability to set custom headers
-* ability to use http and not only https
-* gracefully complete the request if the server doesn't actually require NTLM.
-  Fail only if `options.ntlm.strict` is set to `true` (default=`false`).
-* implement streaming
-* promisified
+The core of this reposotory comes from [request-ntlm](https://github.com/colynb/request-ntlm) which was imporoved by [request-ntlm-continued](https://github.com/FrankyBoy/request-ntlm). Here you can find complete refactor of both with ability to use promises.

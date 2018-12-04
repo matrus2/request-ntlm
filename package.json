@@ -1,12 +1,13 @@
 {
-  "name": "request-ntlm-continued",
-  "version": "0.2.0",
-  "description": "NTLM auth for NodeJS - continued from Colyn Brown's project",
+  "name": "request-ntlm-promise",
+  "version": "1.0.0",
+  "description": "Make easy requests with NTLM authentication",
   "main": "index.js",
-  "repository": "https://github.com/FrankyBoy/request-ntlm",
+  "repository": "https://github.com/matrus2/request-ntlm",
   "scripts": {
-    "test": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+    "test": "nyc mocha"
   },
+  "author": "Bogusz Przybyslawski <biuro@matrus.pl>",
   "contributors": [
     {
       "name": "Colyn Brown",
@@ -31,25 +32,24 @@
     {
       "name": "Ygal Bellaiche",
       "url": "https://github.com/ygalbel"
-    },
-    {
-      "name": "Bogusz Przybyslawski",
-      "url": "https://github.com/matrus2"
     }
   ],
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "agentkeepalive": "^4.0.0",
-    "async": "^2.6.1",
-    "lodash": "^4.17.11",
-    "request": "^2.34.0"
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2"
   },
   "devDependencies": {
-    "coveralls": "*",
-    "istanbul": "*",
-    "mocha": "*",
-    "mocha-lcov-reporter": "*",
-    "should": "*"
+    "eslint": "^5.6.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^8.0.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "mocha": "5.2.0",
+    "nock": "^10.0.3",
+    "nyc": "^13.1.0"
   },
   "keywords": [
     "ntlm",
@@ -61,5 +61,8 @@
     "request",
     "http",
     "https"
-  ]
+  ],
+  "engines": {
+    "node": ">=8"
+  }
 }

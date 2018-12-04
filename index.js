@@ -1,82 +1,60 @@
-var _       = require('lodash');
-var async   = require('async');
-var request = require('request');
-var ntlm    = require('./lib/ntlm');
+const request = require('request-promise')
+const ntlm = require('./lib/ntlm')
+const Agent = require('agentkeepalive')
 
-var promisedRequest = function(method, options, params, callback, pipeTarget) {
-  if (!callback && !pipeTarget) {
-    return new Promise((resolve, reject) => {
-      makeRequest(method, options, params, (err, res) => {
-          if (err) reject(err)
-          return resolve(res);
-        }
-      );
-    })
+const startAuth = async options => {
+  var type1msg = ntlm.createType1Message(options)
+  options.headers = {
+    ...options.headers,
+    Connection: 'keep-alive',
+    Authorization: type1msg
   }
-  makeRequest('post', options, params, callback, pipeTarget);
+  return request(options)
 }
 
-var makeRequest = function(method, options, params, callback, pipeTarget) {
+const requestComplete = async (authHeader, options, params) => {
+  if (!authHeader) {
+    throw Error('www-authenticate not found on response of second request')
+  }
+  const type2msg = ntlm.parseType2Message(authHeader)
+  const type3msg = ntlm.createType3Message(type2msg, options)
 
-  var KeepAlive = require('agentkeepalive');
-  if (options.url.toLowerCase().indexOf('https://') === 0) {
-    KeepAlive = KeepAlive.HttpsAgent;
+  options.headers = {
+    ...options.headers,
+    Connection: 'keep-alive',
+    Authorization: type3msg
   }
 
-  var keepaliveAgent = new KeepAlive();
+  if (typeof params === 'string') options.body = params
+  else options.json = params
+  return request(options)
+}
 
-  if (!options.workstation) options.workstation = '';
-  if (!options.ntlm_domain) options.ntlm_domain = '';
-  if (!options.headers    ) options.headers     = {};
+const makeRequest = method => async (options, params) => {
+  const KeepAliveAgent =
+    options.url.toLowerCase().indexOf('https://') === 0
+      ? Agent.HttpsAgent
+      : Agent
 
-  options.ntlm = options.ntlm || {};
-  options.ntlm.strict = Boolean(options.ntlm.strict);
-
-  function startAuth($) {
-    var type1msg = ntlm.createType1Message(options);
-    options.method = method;
-    _.extend(options.headers, {
-      'Connection': 'keep-alive',
-      'Authorization': type1msg
-    });
-    options.agent = keepaliveAgent;
-    request(options, $);
+  options = {
+    workstation: '',
+    ntlm_domain: '',
+    headers: {},
+    method,
+    agent: new KeepAliveAgent(),
+    ...options
   }
 
-  function requestComplete(res, body, $) {
-    if (!res.headers['www-authenticate']) {
-      return options.ntlm.strict
-          ? $(new Error('www-authenticate not found on response of second request'))
-          : $(null, res, body);
-    }
+  let authHeader = ''
+  await startAuth(options).catch(e => {
+    authHeader = e.response.headers['www-authenticate']
+  })
 
-    var type2msg = ntlm.parseType2Message(res.headers['www-authenticate']);
-    var type3msg = ntlm.createType3Message(type2msg, options);
-    options.method = method;
-    _.extend(options.headers, {
-      'Connection': 'keep-alive',
-      'Authorization': type3msg
-    });
+  return requestComplete(authHeader, options, params)
+}
 
-    options.agent = keepaliveAgent;
-
-    if (typeof params == "string")
-      options.body = params;
-    else
-      options.json = params;
-
-    if (pipeTarget) {
-      request(options, $).pipe(pipeTarget);
-    } else {
-      request(options, $);
-    }
-  }
-
-  async.waterfall([startAuth, requestComplete], callback);
-};
-
-exports.get     = _.partial(promisedRequest, 'get');
-exports.post    = _.partial(promisedRequest, 'post');
-exports.put     = _.partial(promisedRequest, 'put');
-exports.patch   = _.partial(promisedRequest, 'patch');
-exports.delete  = _.partial(promisedRequest, 'delete');
+exports.get = makeRequest('get')
+exports.post = makeRequest('post')
+exports.put = makeRequest('put')
+exports.patch = makeRequest('patch')
+exports.delete = makeRequest('delete')
