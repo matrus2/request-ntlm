@@ -1,4 +1,5 @@
 const request = require('request-promise')
+const errors = require('request-promise/errors')
 const ntlm = require('./lib/ntlm')
 const Agent = require('agentkeepalive')
 
@@ -46,8 +47,12 @@ const makeRequest = method => async (options, params) => {
   }
 
   let authHeader = ''
-  await startAuth(options).catch(e => {
-    authHeader = e.response.headers['www-authenticate']
+  await startAuth(options).catch((e) => {
+    if (e instanceof errors.StatusCodeError) {
+      authHeader = e.response.headers['www-authenticate']
+    } else {
+      throw e
+    }
   })
 
   return requestComplete(authHeader, options, params)

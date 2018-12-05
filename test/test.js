@@ -72,4 +72,21 @@ describe('request-ntlm-promise', function () {
       )
     })
   })
+  it('in case not statusCodeError', async () => {
+    const options = {
+      username: 'username',
+      password: 'password',
+      ntlm_domain: 'https://test',
+      workstation: 'workstation',
+      url: 'https://test?q=ntlm',
+      headers: {}
+    }
+
+    request.get(options, {}).catch(e => {
+      assert.strictEqual(
+        e.message,
+        'Error: getaddrinfo EAI_AGAIN test:443'
+      )
+    })
+  })
 })

@@ -1,3 +1,7 @@
+# 1.1.1
+
+Handle error of first auth call properly
+
 # 1.1.0
 
 Add Typescript types
