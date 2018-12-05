@@ -1,15 +1,14 @@
 import requestPromise = require('request-promise');
-import request = require('request');
 
-declare function del(options: requestNTLMOptions, params?: any): request.Response;
+declare function del(options: requestNTLMOptions, params?: any): Promise<any>;
 
-export function get(options: requestNTLMOptions, params?: any): request.Response;
+export function get(options: requestNTLMOptions, params?: any): Promise<any>;
 
-export function post(options: requestNTLMOptions, params?: any): request.Response;
+export function post(options: requestNTLMOptions, params?: any): Promise<any>;
 
-export function put(options: requestNTLMOptions, params?: any): request.Response;
+export function put(options: requestNTLMOptions, params?: any): Promise<any>;
 
-export function patch(options: requestNTLMOptions, params?: any): request.Response;
+export function patch(options: requestNTLMOptions, params?: any): Promise<any>;
 
 export { del as delete }
 

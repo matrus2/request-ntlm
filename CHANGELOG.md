@@ -1,3 +1,7 @@
+# 1.1.2
+
+Fix typings to return promises
+
 # 1.1.1
 
 Handle error of first auth call properly

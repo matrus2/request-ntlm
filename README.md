@@ -14,7 +14,11 @@ The core of this reposotory comes from [request-ntlm](https://github.com/colynb/
 $ npm install request-ntlm-promise
 ```
 #### Import
-`const ntlm = require('request-ntlm-promise');`
+```
+const ntlm = require('request-ntlm-promise');
+// Typescript
+import * as Request from 'request-ntlm-promise';
+```
 #### Choose method
 ##### `reqntlm.get(options, json)`
 ##### `reqntlm.post(options, json)`
