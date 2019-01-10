@@ -38,6 +38,9 @@ import * as Request from 'request-ntlm-promise';
 ##### `params`
 This can be `string` or `object`
 
+##### `streamCallback`
+Optional. If provided then you will get a stream instead of promise. Useful if working with files.  
+
 ### Example
 ```javascript
 const ntlm = require('request-ntlm-promise');
@@ -57,5 +60,10 @@ ntlm.post(options, json).then(console.log)
 // or use async/await
 const data = await ntlm.post(options, json)
 console.log(data)
+
+// or stream
+ntlm.post(options, json, (response) => {
+  reply(response)  // Hapi js handler
+})
 ```
 

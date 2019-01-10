@@ -89,4 +89,30 @@ describe('request-ntlm-promise', function () {
       )
     })
   })
+  it('send reponse as a stream', async () => {
+    const options = {
+      username: 'username',
+      password: 'password',
+      ntlm_domain: 'https://www.google.com',
+      workstation: 'workstation',
+      url: 'https://www.google.com/search?q=ntlm',
+      headers: {}
+    }
+
+    nock(options.ntlm_domain)
+      .get('/search?q=ntlm')
+      .reply(401, '', {
+        'www-authenticate':
+          'NTLM TlRMTVNTUAACAAAAKAAoADAAAAAHggEAfPyj3n1GAoQAAAAAAAAA\n' +
+          'AAAAAABYAAAASQBuAHQAZQByAG4AZQB0AC4AaQBjAGIAYwAuAGMAbwBtAC4AYwBuAA=='
+      })
+      .get('/search?q=ntlm')
+      .reply(200, 'test')
+
+    request.get(options, {}, (res) => {
+      res.on('data', (data) => {
+        assert.strictEqual(data, 'test')
+      })
+    })
+  })
 })

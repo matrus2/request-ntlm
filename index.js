@@ -1,4 +1,5 @@
 const request = require('request-promise')
+const requestNative = require('request')
 const errors = require('request-promise/errors')
 const ntlm = require('./lib/ntlm')
 const Agent = require('agentkeepalive')
@@ -13,7 +14,7 @@ const startAuth = async options => {
   return request(options)
 }
 
-const requestComplete = async (authHeader, options, params) => {
+const requestComplete = async (authHeader, options, params, streamCallback) => {
   if (!authHeader) {
     throw Error('www-authenticate not found on response of second request')
   }
@@ -28,10 +29,10 @@ const requestComplete = async (authHeader, options, params) => {
 
   if (typeof params === 'string') options.body = params
   else options.json = params
-  return request(options)
+  return streamCallback ? requestNative(options).on('response', streamCallback) : request(options)
 }
 
-const makeRequest = method => async (options, params) => {
+const makeRequest = method => async (options, params, streamCallback) => {
   const KeepAliveAgent =
     options.url.toLowerCase().indexOf('https://') === 0
       ? Agent.HttpsAgent
@@ -55,7 +56,7 @@ const makeRequest = method => async (options, params) => {
     }
   })
 
-  return requestComplete(authHeader, options, params)
+  return requestComplete(authHeader, options, params, streamCallback)
 }
 
 exports.get = makeRequest('get')
