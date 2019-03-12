@@ -24,7 +24,7 @@ describe('request-ntlm-promise', function () {
       .get('/search?q=ntlm')
       .reply(200, 'test')
 
-    request.get(options, {}).then(data => {
+    await request.get(options, {}).then(data => {
       assert.strictEqual('test', data)
     })
   })
@@ -48,7 +48,7 @@ describe('request-ntlm-promise', function () {
       .get('/search?q=ntlm')
       .reply(200, 'test')
 
-    request.get(options, '').then(data => {
+    await request.get(options, '').then(data => {
       assert.strictEqual('test', data)
     })
   })
@@ -65,7 +65,7 @@ describe('request-ntlm-promise', function () {
       .get('/search?q=ntlm')
       .reply(401)
 
-    request.get(options, {}).catch(e => {
+    await request.get(options, {}).catch(e => {
       assert.strictEqual(
         e.message,
         'www-authenticate not found on response of second request'
@@ -82,7 +82,7 @@ describe('request-ntlm-promise', function () {
       headers: {}
     }
 
-    request.get(options, {}).catch(e => {
+    await request.get(options, {}).catch(e => {
       assert.strictEqual(
         e.message,
         'Error: getaddrinfo EAI_AGAIN test:443'
@@ -109,9 +109,9 @@ describe('request-ntlm-promise', function () {
       .get('/search?q=ntlm')
       .reply(200, 'test')
 
-    request.get(options, {}, (res) => {
+    await request.get(options, {}, (res) => {
       res.on('data', (data) => {
-        assert.strictEqual(data, 'test')
+        assert.strictEqual(data.toString(), 'test')
       })
     })
   })

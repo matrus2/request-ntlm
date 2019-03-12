@@ -5,7 +5,8 @@
   "main": "index.js",
   "repository": "https://github.com/matrus2/request-ntlm",
   "scripts": {
-    "test": "nyc mocha"
+    "test": "nyc mocha",
+    "lint": "node_modules/.bin/eslint ."
   },
   "author": "Bogusz Przybyslawski <biuro@matrus.pl>",
   "contributors": [
@@ -36,21 +37,21 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "agentkeepalive": "^4.0.0",
+    "agentkeepalive": "^4.0.2",
     "request": "^2.88.0",
-    "request-promise": "^4.2.2"
+    "request-promise": "^4.2.4"
   },
   "devDependencies": {
     "@types/request-promise": "^4.1.42",
-    "eslint": "^5.6.0",
+    "eslint": "^5.15.1",
     "eslint-config-standard": "^12.0.0",
-    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-node": "^8.0.0",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
-    "mocha": "5.2.0",
+    "mocha": "6.0.2",
     "nock": "^10.0.3",
-    "nyc": "^13.1.0"
+    "nyc": "^13.3.0"
   },
   "keywords": [
     "ntlm",
