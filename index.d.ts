@@ -11,6 +11,8 @@ export function put(options: requestNTLMOptions, params?: any, streamCallback?: 
 
 export function patch(options: requestNTLMOptions, params?: any, streamCallback?: (resp: Response) => void): Promise<any>;
 
+export function options(options: requestNTLMOptions, params?: any, streamCallback?: (resp: Response) => void): Promise<any>;
+
 export { del as delete }
 
 export interface requestNTLMOptions extends requestPromise.OptionsWithUrl {
