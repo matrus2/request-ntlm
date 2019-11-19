@@ -3,6 +3,7 @@ const requestNative = require('request')
 const errors = require('request-promise/errors')
 const ntlm = require('./lib/ntlm')
 const Agent = require('agentkeepalive')
+const stream = require('stream')
 
 const startAuth = async options => {
   var type1msg = ntlm.createType1Message(options)
@@ -27,7 +28,7 @@ const requestComplete = async (authHeader, options, params, streamCallback) => {
     Authorization: type3msg
   }
 
-  if (typeof params === 'string') options.body = params
+  if (typeof params === 'string' || params instanceof Buffer || params instanceof stream.Readable) options.body = params
   else options.json = params
   return streamCallback ? requestNative(options).on('response', streamCallback) : request(options)
 }
