@@ -66,3 +66,6 @@ exports.put = makeRequest('put')
 exports.patch = makeRequest('patch')
 exports.delete = makeRequest('delete')
 exports.options = makeRequest('options')
+exports.doRequest = async function(method, options, params, streamCallback) {
+  return makeRequest(method)(options, params, streamCallback)
+}
