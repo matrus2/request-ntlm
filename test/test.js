@@ -84,8 +84,8 @@ describe('request-ntlm-promise', function () {
 
     await request.get(options, {}).catch(e => {
       assert.strictEqual(
-        e.message,
-        'Error: getaddrinfo EAI_AGAIN test:443'
+        e.name,
+        'RequestError'
       )
     })
   })
